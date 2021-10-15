@@ -3,14 +3,14 @@ from fastapi import FastAPI
 
 # Firebase Config - Required info to connect to Firebase
 firebaseConfig = {
-    'apiKey': "AIzaSyBVKvjaU_f-X1XK00b7xuKG0SjKQZctN0w",
-    'authDomain': "deskfooddb.firebaseapp.com",
-    'databaseURL': "https://deskfooddb-default-rtdb.firebaseio.com",
-    'projectId': "deskfooddb",
-    'storageBucket': "deskfooddb.appspot.com",
-    'messagingSenderId': "761539939885",
-    'appId': "1:761539939885:web:ed0aa4e21c9f3f2e61f2a4",
-    'measurementId': "G-04RKER4JGV"
+    'apiKey': "AIzaSyDU0ygdrujK-vkCQb7fRtkv2hGVbxV6A6I",
+    'authDomain': "deskfoodapp.firebaseapp.com",
+    'databaseURL': "https://deskfoodapp-default-rtdb.firebaseio.com",
+    'projectId': "deskfoodapp",
+    'storageBucket': "deskfoodapp.appspot.com",
+    'messagingSenderId': "42027451518",
+    'appId': "1:42027451518:web:69bb99b1689fafe5b2042f",
+    'measurementId': "G-9M9EJD2HSH"
 }
 
 # Initializes connection to Firebase
