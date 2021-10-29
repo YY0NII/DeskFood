@@ -91,6 +91,19 @@
      <string notr="true">font: 32pt &quot;.AppleSystemUIFont&quot;;</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="returnBTN">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>40</y>
+      <width>111</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Return to Menu</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

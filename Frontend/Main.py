@@ -2,7 +2,7 @@ from os import name
 import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QWidget
+from PyQt5.QtWidgets import QCheckBox, QDialog, QApplication, QStackedWidget, QWidget
 from urllib.request import urlopen
 import json
 
@@ -13,10 +13,72 @@ class loginScreen(QDialog):
         self.loginButton.clicked.connect(self.login)
 
     def login(self):
+        kScreen = kitchenMenu()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
+class kitchenMenu(QDialog):
+    def __init__(self):
+        super(kitchenMenu, self).__init__()
+        loadUi("KitchenMenu.ui", self)
+        self.AddItemBTN.clicked.connect(self.addItem)
+        self.viewKitchensBTN.clicked.connect(self.viewKitchens)
+
+    def addItem(self):
+        kScreen = kitchenAddItem()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+    def viewKitchens(self):
         kScreen = KitchensScreen()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+class kitchenAddItem(QDialog):
+    def __init__(self):
+        super(kitchenAddItem, self).__init__()
+        loadUi("KitchenAddItem.ui", self)
+        self.returnBTN.clicked.connect(self.goBack)
+        self.freshensCheck.clicked.connect(self.unclickF)
+        self.deliCheck.clicked.connect(self.unclickD)
+        self.pizzaCheck.clicked.connect(self.unclickP)
+        self.burgerCheck.clicked.connect(self.unclickB)
+        self.marketCheck.clicked.connect(self.unclickM)
+
+
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
+    def unclickF(self):
+        self.freshensCheck.setChecked(1)
+        self.deliCheck.setChecked(0)
+        self.pizzaCheck.setChecked(0)
+        self.burgerCheck.setChecked(0)
+        self.marketCheck.setChecked(0)
+    def unclickD(self):
+        self.freshensCheck.setChecked(0)
+        self.deliCheck.setChecked(1)
+        self.pizzaCheck.setChecked(0)
+        self.burgerCheck.setChecked(0)
+        self.marketCheck.setChecked(0)
+    def unclickP(self):
+        self.freshensCheck.setChecked(0)
+        self.deliCheck.setChecked(0)
+        self.pizzaCheck.setChecked(1)
+        self.burgerCheck.setChecked(0)
+        self.marketCheck.setChecked(0)
+    def unclickB(self):
+        self.freshensCheck.setChecked(0)
+        self.deliCheck.setChecked(0)
+        self.pizzaCheck.setChecked(0)
+        self.burgerCheck.setChecked(1)
+        self.marketCheck.setChecked(0)
+    def unclickM(self):
+        self.freshensCheck.setChecked(0)
+        self.deliCheck.setChecked(0)
+        self.pizzaCheck.setChecked(0)
+        self.burgerCheck.setChecked(0)
+        self.marketCheck.setChecked(1)
 class KitchensScreen(QDialog):
     def __init__(self):
         super(KitchensScreen, self).__init__()
@@ -24,6 +86,11 @@ class KitchensScreen(QDialog):
         self.loadKitchens()
         self.kitchensList.itemDoubleClicked.connect(self.loadMenu)
         self.locationLabel.setText("Campus Center Market")
+        self.returnBTN.clicked.connect(self.goBack)
+
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
 
     def loadKitchens(self):
         # parameter for urlopen
