@@ -83,7 +83,7 @@ def getKitchens():
 # READ ALL ITEMS FOR A KITCHEN
 @app.get("/Kitchens/{kitchenName}")
 def getKitchenMenu(kitchenName):
-    kitchen = db.child("Kitchen").child(kitchenName).child("menu").get()
+    kitchen = db.child("Kitchen").child(kitchenName).child("Menu").get()
     return kitchen.val()
 
 # -----------------------UPDATE-----------------------
