@@ -1,7 +1,7 @@
-from typing import List, Sequence, Type
 import pyrebase
 from fastapi import FastAPI
-from pydantic import BaseModel
+from DeskFoodModels.DeskFoodLib import Kitchen, Menu, Item
+from typing import List, Sequence, Type
 
 # Firebase Config - Required info to connect to Firebase
 firebaseConfig = {
@@ -23,21 +23,6 @@ db = firebase.database()
 
 # Initializes FastAPI module
 app = FastAPI()
-
-class Item(BaseModel):
-    name: str
-    price: float
-    status: str
-
-class Menu(BaseModel):
-    items: List[Item]
-class Kitchen(BaseModel):
-    name: str
-    location: str
-    rating: int
-    menu: Menu
-
-
 
 # db.child("Kitchen").child("Freshens").set(data)
 #Method to convert a list of items is into a dictionary
@@ -89,8 +74,9 @@ def getKitchenMenu(kitchenName):
 # -----------------------UPDATE-----------------------
 # UPDATES MENU WITH NEW ITEM(S) 
 @app.put("/AddToMenu/{kitchenName}")
-def addToMenu(items: List[Item], kitchenName):
-    db.child("Kitchen").child(kitchenName).child("Menu").update(listToDict(items))
+def addToMenu(item: Item, kitchenName):
+    db.child("Kitchen").child(kitchenName).child("Menu").child(item.name).child("Price").set(item.price)
+    db.child("Kitchen").child(kitchenName).child("Menu").child(item.name).child("Status").set(item.status)
     
     return {}
 

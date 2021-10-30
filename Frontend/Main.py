@@ -79,6 +79,7 @@ class kitchenAddItem(QDialog):
         self.pizzaCheck.setChecked(0)
         self.burgerCheck.setChecked(0)
         self.marketCheck.setChecked(1)
+
 class KitchensScreen(QDialog):
     def __init__(self):
         super(KitchensScreen, self).__init__()
