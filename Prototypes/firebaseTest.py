@@ -2,7 +2,7 @@ import pyrebase
 import sys
 sys.path.append('../')
 
-from DeskFoodModels.DeskFoodLib import Kitchen, Menu, Item
+from DeskFoodModels.DeskFoodLib import Kitchen, Menu, Item, OrderStatus, Order, OrderItem
 from typing import List, Sequence, Type
 
 # Firebase Config - Required info to connect to Firebase
@@ -25,6 +25,28 @@ db = firebase.database()
 
 boolTest = True
 
-db.push(boolTest)
+#print(db.push(boolTest))
 
-print(db.child("-MnWj3lGxUT7yweMlgfW").get().val())
+#print(db.child("-MnWj3lGxUT7yweMlgfW").get().val())
+
+#print(OrderStatus.pending.name)
+
+#print(db.push(OrderStatus.pending.name))
+
+order = Order(
+    items = [
+        OrderItem(
+            from_kitchen = "Kitchen",
+            item = Item(
+                name = "",
+                price = 0.0,
+                available = True,
+                description = ""
+            )
+        )
+    ],
+    total = 0.0
+)
+
+#print(order)
+print(order.status.name)

@@ -27,10 +27,15 @@ class kitchenMenu(QDialog):
         super(kitchenMenu, self).__init__()
         loadUi("KitchenMenu.ui", self)
         self.AddItemBTN.clicked.connect(self.addItem)
+        self.updateAvailabilityBTN.clicked.connect(self.updateAvailability)
         self.viewKitchensBTN.clicked.connect(self.viewKitchens)
 
     def addItem(self):
         kScreen = kitchenAddItem()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+    def updateAvailability(self):
+        kScreen = kitchenUpdateAvailability()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
     def viewKitchens(self):
@@ -110,6 +115,78 @@ class kitchenAddItem(QDialog):
                     self.pizzaCheck.setChecked(0)
                     self.burgerCheck.setChecked(0)
                     self.marketCheck.setChecked(0)
+
+#--------------------Kitchens Update Availability--------------------
+class kitchenUpdateAvailability(QDialog):
+    def __init__(self):
+        super(kitchenUpdateAvailability, self).__init__()
+        loadUi("KitchenUpdateAvailability.ui", self)
+        self.returnBTN.clicked.connect(self.goBack)
+        self.freshensCheck.clicked.connect(self.unclickF)
+        self.deliCheck.clicked.connect(self.unclickD)
+        self.pizzaCheck.clicked.connect(self.unclickP)
+        self.burgerCheck.clicked.connect(self.unclickB)
+        self.marketCheck.clicked.connect(self.unclickM)
+        self.finishBTN.clicked.connect(self.finish)
+
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
+
+    def unclickF(self):
+        self.freshensCheck.setChecked(1)
+        self.deliCheck.setChecked(0)
+        self.pizzaCheck.setChecked(0)
+        self.burgerCheck.setChecked(0)
+        self.marketCheck.setChecked(0)
+        
+    def unclickD(self):
+        self.freshensCheck.setChecked(0)
+        self.deliCheck.setChecked(1)
+        self.pizzaCheck.setChecked(0)
+        self.burgerCheck.setChecked(0)
+        self.marketCheck.setChecked(0)
+        
+    def unclickP(self):
+        self.freshensCheck.setChecked(0)
+        self.deliCheck.setChecked(0)
+        self.pizzaCheck.setChecked(1)
+        self.burgerCheck.setChecked(0)
+        self.marketCheck.setChecked(0)
+        
+    def unclickB(self):
+        self.freshensCheck.setChecked(0)
+        self.deliCheck.setChecked(0)
+        self.pizzaCheck.setChecked(0)
+        self.burgerCheck.setChecked(1)
+        self.marketCheck.setChecked(0)
+        
+    def unclickM(self):
+        self.freshensCheck.setChecked(0)
+        self.deliCheck.setChecked(0)
+        self.pizzaCheck.setChecked(0)
+        self.burgerCheck.setChecked(0)
+        self.marketCheck.setChecked(1)
+        
+    def finish(self):
+        if(len(self.textName.toPlainText()) > 0):
+            if((self.freshensCheck.checkState()) or (self.deliCheck.checkState()) or (self.pizzaCheck.checkState()) or (self.burgerCheck.checkState()) or self.marketCheck.checkState()):
+                avail = False
+                if(self.checkBox.checkState()): avail = True
+                if(self.freshensCheck.checkState()): mykitchen = "Freshens"
+                if(self.deliCheck.checkState()): mykitchen = "Deli"
+                if(self.pizzaCheck.checkState()): mykitchen = "Pizza"
+                if(self.burgerCheck.checkState()): mykitchen = "Burgers"
+                if(self.marketCheck.checkState()): mykitchen = "Market"
+                item = Item(name = self.textName.toPlainText(), price = 0, available = avail)
+                r = requests.put("http://localhost:8000/UpdateItemAvailability/" + mykitchen + "/" + item.name + "?availability=" + str(item.available))
+                self.textName.setText("")
+                self.checkBox.setChecked(0)
+                self.freshensCheck.setChecked(0)
+                self.deliCheck.setChecked(0)
+                self.pizzaCheck.setChecked(0)
+                self.burgerCheck.setChecked(0)
+                self.marketCheck.setChecked(0)
 
 #--------------------Kitchens and Menu Window--------------------
 class KitchensScreen(QDialog):

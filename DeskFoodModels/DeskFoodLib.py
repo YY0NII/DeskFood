@@ -1,5 +1,6 @@
 from typing import List, Optional, Sequence, Type
 from pydantic import BaseModel
+import enum
 
 # An item in the menu is a food item with a name, price, availability and description
 class Item(BaseModel):
@@ -18,15 +19,30 @@ class Kitchen(BaseModel):
     rating: int
     menu: Menu
 
+# Enum for order status
+class OrderStatus(enum.Enum):
+    pending = 'pending'
+    cooking = 'cooking'
+    ready = 'ready'
+    onTheWay = 'on the way'
+    delivered = 'delivered'
+
 # An OrderItem is composed of an item and the restuarant that the item is from
 class OrderItem(BaseModel):
     from_kitchen: str
     item: Item
 
-# An Order should have a unique ID, a user ID [Optional], a list of order items, and a total price
+# An Order should have a user ID [Optional], a list of items, an order status, and a total price
 class Order(BaseModel):
-    id: int
     user_id: Optional[int] = None
     items: List[OrderItem]
     total: float
-    status: str
+    status: OrderStatus = OrderStatus.pending
+    # Thinking of tying the order to a kitchen instead of having an order item
+    # A user would have the choice to order from a kitchen and then pick something from the market
+    # Or they could order from the market directly without needing a kitchen order
+    # So on the database from_Kitchen would either be a kitchen or market. 
+    # This is because a kitchen order can contain a market order but not the other way around
+    # Should also contain the name of the person who ordered
+
+    # Gonna have to add an Orders table to the Kitchens, Runners, and users tables
