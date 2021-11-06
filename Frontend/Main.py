@@ -30,21 +30,30 @@ class kitchenMenu(QDialog):
         self.updatePriceBTN.clicked.connect(self.updatePrice)
         self.updateAvailabilityBTN.clicked.connect(self.updateAvailability)
         self.viewKitchensBTN.clicked.connect(self.viewKitchens)
+        self.RemoveItemBTN.clicked.connect(self.removeItem)
 
     def addItem(self):
         kScreen = kitchenAddItem()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
     def updatePrice(self):
         kScreen = kitchenUpdatePrice()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
     def updateAvailability(self):
         kScreen = kitchenUpdateAvailability()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
     def viewKitchens(self):
         kScreen = KitchensScreen()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def removeItem(self):
+        kScreen = KitchenRemoveItem()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
@@ -120,6 +129,24 @@ class kitchenAddItem(QDialog):
                     self.pizzaCheck.setChecked(0)
                     self.burgerCheck.setChecked(0)
                     self.marketCheck.setChecked(0)
+
+#--------------------Kitchens Remove Item Window--------------------
+class KitchenRemoveItem(QDialog):
+    def __init__(self):
+        super(KitchenRemoveItem, self).__init__()
+        loadUi("KitchenRemoveItem.ui", self)
+        self.ReturnButton.clicked.connect(self.goBack)
+        self.ConfirmButton.clicked.connect(self.RemoveItem)
+
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
+
+    def RemoveItem(self):
+        if(len(self.KitchName.toPlainText()) > 0):
+            if(len(self.ItemName.toPlainText()) > 0):
+                r = requests.delete("http://localhost:8000/RemoveItemFromMenu/" + self.KitchName.toPlainText() + "/" +self.ItemName.toPlainText())
+
 
 #--------------------Kitchens Update Price Window--------------------
 class kitchenUpdatePrice(QDialog):
