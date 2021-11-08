@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QCheckBox, QDialog, QApplication, QStackedWidget, QWidget
 from urllib.request import urlopen
 import json
+from DeskFoodModels import firebaseAuth
 
 #--------------------Login Window--------------------
 class loginScreen(QDialog):
@@ -15,8 +16,67 @@ class loginScreen(QDialog):
         super(loginScreen, self).__init__()
         loadUi("Login.ui", self)
         self.loginButton.clicked.connect(self.login)
+        self.registerButton.clicked.connect(self.register)
+        self.passwordEdit.setEchoMode(QtWidgets.QLineEdit.Password)
 
     def login(self):
+        self.username = self.emailEdit.text()
+        self.password = self.passwordEdit.text()
+        self.user = firebaseAuth.login(self.username, self.password)
+
+        if self.user:
+            self.accept()
+        else:
+            self.emailEdit.setText("")
+            self.passwordEdit.setText("")
+            self.emailEdit.setFocus()
+            #self.errorLabel.setText("Invalid username or password")
+
+    def register(self):
+        kscreen = registerScreen()
+        widget.addWidget(kscreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def accept(self):
+        kScreen = kitchenMenu()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#--------------------Register Window--------------------
+class registerScreen(QDialog):
+    def __init__(self):
+        super(registerScreen, self).__init__()
+        loadUi("SignUp.ui", self)
+        self.registerButton.clicked.connect(self.register)
+        self.registerButton.setEnabled(False)
+        self.passwordEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.passwordConfirmEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.termsAndConditionsRadioButton.toggled.connect(self.enableRegisterButton)
+
+    def register(self):
+        self.username = self.userNameEdit.text()
+        self.password = self.passwordEdit.text()
+        self.passwordConfirm = self.passwordConfirmEdit.text()
+        self.email = self.emailEdit.text()
+
+        if self.username != "" and self.password != "" and self.passwordConfirm != "":
+            if self.password == self.passwordConfirm:
+                self.user = firebaseAuth.register(self.email, self.password, self.username)
+                if self.user:
+                    self.accept()
+                
+        self.passwordEdit.setText("")
+        self.passwordConfirmEdit.setText("")
+        self.userNameEdit.setFocus()
+        #self.errorLabel.setText("Invalid username or password")
+
+    def enableRegisterButton(self):
+        if self.termsAndConditionsRadioButton.isChecked():
+            self.registerButton.setEnabled(True)
+        else:
+            self.registerButton.setEnabled(False)
+
+    def accept(self):
         kScreen = kitchenMenu()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)

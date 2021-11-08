@@ -19,8 +19,8 @@
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>80</y>
+     <x>30</x>
+     <y>60</y>
      <width>431</width>
      <height>501</height>
     </rect>
@@ -49,8 +49,11 @@
     <property name="textFormat">
      <enum>Qt::RichText</enum>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="userNameEdit">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -69,7 +72,7 @@
      <string>User Name</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="passwordEdit">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -88,7 +91,7 @@
      <string>Password</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
+   <widget class="QLineEdit" name="passwordConfirmEdit">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -107,7 +110,7 @@
      <string>Retype Password</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_4">
+   <widget class="QLineEdit" name="emailEdit">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -126,7 +129,7 @@
      <string>Email</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="registerButton">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -142,7 +145,7 @@
      <string>Sign Up!</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton">
+   <widget class="QRadioButton" name="termsAndConditionsRadioButton">
     <property name="geometry">
      <rect>
       <x>101</x>
@@ -153,6 +156,9 @@
     </property>
     <property name="text">
      <string>I Agree with the Terms and Conditions</string>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
