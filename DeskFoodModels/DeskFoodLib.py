@@ -27,15 +27,10 @@ class OrderStatus(enum.Enum):
     onTheWay = 'on the way'
     delivered = 'delivered'
 
-# An OrderItem is composed of an item and the restuarant that the item is from
-class OrderItem(BaseModel):
-    from_kitchen: str
-    item: Item
-
 # An Order should have a user ID [Optional], a list of items, an order status, and a total price
 class Order(BaseModel):
     user_id: Optional[int] = None
-    items: List[OrderItem]
+    items: List[Item]
     total: float
     status: OrderStatus = OrderStatus.pending
     # Thinking of tying the order to a kitchen instead of having an order item

@@ -73,6 +73,18 @@ def getKitchenMenu(kitchenName):
     kitchen = db.child("Kitchen").child(kitchenName).child("Menu").get()
     return kitchen.val()
 
+# READ THE PRICE OF AN ITEM
+@app.get("/Kitchens/{kitchenName}/{itemName}/Price")
+def getItemPrice(kitchenName, itemName):
+    item = db.child("Kitchen").child(kitchenName).child("Menu").child(itemName).child("Price").get()
+    return item.val()
+
+# READ THE AVAILABILITY OF AN ITEM
+@app.get("/Kitchens/{kitchenName}/{itemName}/Availability")
+def getItemAvailability(kitchenName, itemName):
+    item = db.child("Kitchen").child(kitchenName).child("Menu").child(itemName).child("Available").get()
+    return item.val()
+
 # -----------------------UPDATE-----------------------
 # UPDATES MENU WITH NEW ITEM(S) 
 @app.put("/AddToMenu/{kitchenName}")
