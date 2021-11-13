@@ -25,10 +25,6 @@ def login(email, password):
     except:
         return None
 
-# Function to logout from Firebase
-def logout():
-    auth.logout()
-
 # Function to create a new user in Firebase
 # password must be at least 6 characters long
 def register(email, password, username):
@@ -38,5 +34,3 @@ def register(email, password, username):
         return user
     except:
         return None
-
-#print(register("AnotherNewTest@sol.com", "askdfhvkd", "rocketMan")['localId'])
