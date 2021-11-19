@@ -1,11 +1,12 @@
 from os import name
 import sys
+from pyasn1_modules.rfc2459 import Name
 import requests
 sys.path.append('../')
 from DeskFoodModels.DeskFoodLib import Kitchen, Menu, Item
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialog, QApplication, QListWidget, QMenu, QPushButton, QStackedWidget, QWidget
+from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialog, QApplication, QListWidget, QMenu, QPushButton, QStackedWidget, QTextBrowser, QWidget
 from urllib.request import urlopen
 import json
 from DeskFoodModels import firebaseAuth
@@ -25,7 +26,10 @@ class loginScreen(QDialog):
         self.user = firebaseAuth.login(self.username, self.password)
 
         if self.user:
-            self.accept()
+            if(self.username == "admin@admin.com"):
+                self.acceptadmin()
+            else:
+                self.accept()
         else:
             self.emailEdit.setText("")
             self.passwordEdit.setText("")
@@ -33,11 +37,16 @@ class loginScreen(QDialog):
             #self.errorLabel.setText("Invalid username or password")
 
     def register(self):
-        kscreen = registerScreen()
-        widget.addWidget(kscreen)
+        kScreen = registerScreen()
+        widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def accept(self):
+        kScreen = customerORRunner()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+    
+    def acceptadmin(self):
         kScreen = kitchenMenu()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
@@ -77,9 +86,88 @@ class registerScreen(QDialog):
             self.registerButton.setEnabled(False)
 
     def accept(self):
+        kScreen = customerORRunner()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#--------------------Customer or Runner Window---------------
+class customerORRunner(QDialog):
+    def __init__(self):
+        super(customerORRunner, self).__init__()
+        loadUi("customerORrunner.ui", self)
+        self.customerBTN.clicked.connect(self.customer)
+        self.runnerBTN.clicked.connect(self.runner)
+        
+
+    def customer(self):
+        kScreen = orderWindow()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def runner(self):
         kScreen = kitchenMenu()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#--------------------Order Window----------------------------
+class orderWindow(QDialog):
+    #TODO: Fix number format by rounding it to 2 decimal places
+    def __init__(self):
+        super(orderWindow, self).__init__()
+        loadUi("Order.ui", self)
+        self.subtotalText.setText("0")
+        self.loadKitchens()
+        self.kitchensList.itemDoubleClicked.connect(self.loadMenu)
+        self.returnBTN.clicked.connect(self.goBack)
+        self.menuList.itemDoubleClicked.connect(self.addToOrder)
+
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
+
+    def loadKitchens(self):
+        # parameter for urlopen
+        url = "http://127.0.0.1:8000/Kitchens"
+
+        # store the response of URL
+        response = urlopen(url)
+
+        # storing the JSON response
+        # # from url in data
+        data_json = json.loads(response.read())
+        self.kitchensList.addItems(data_json)
+
+    def loadMenu(self):
+        nameOfKitchen = self.kitchensList.currentItem().text()
+        # parameter for urlopen
+        url = "http://127.0.0.1:8000/Kitchens/" + nameOfKitchen
+
+        # store the response of URL
+        response = urlopen(url)
+
+        # storing the JSON response
+        # # from url in data
+        data_json = json.loads(response.read())
+        self.menuList.clear()
+        myArray = data_json.keys()
+        for val in myArray:
+            if (data_json[val]["Available"]):
+                self.menuList.addItem(str(val) + ": $" + str(data_json[val]["Price"]))
+
+    def addToOrder(self):
+        itemToAdd = self.menuList.currentItem().text()
+        temp = itemToAdd.split(':')
+        itemToAdd2 = temp[0]
+        self.orderList.addItem(itemToAdd2)
+        subtotal = float(self.subtotalText.toPlainText())
+        temp2 = itemToAdd.split('$')
+        subtotal2 = float(temp2[1])
+        subtotal = subtotal + subtotal2
+        self.subtotalText.setText(str(subtotal))
+        tax = subtotal * .08
+        self.taxText.setText(str(tax))
+        subtotal = float(self.subtotalText.toPlainText())
+        self.totalText.setText(str(tax + subtotal))
 
 #--------------------Select Option Window--------------------
 class kitchenMenu(QDialog):
@@ -246,8 +334,11 @@ class kitchenUpdatePrice(QDialog):
         data_json = json.loads(response.read())
         self.itemBox.clear()
         self.itemBox.addItems(list(data_json.keys()))
+
+    #TODO: FINISHE IMPLEMENTING THIS
     #def fillPRice(self):
         #textCost.setText()
+    
     def goBack(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)
         widget.removeWidget(self)
