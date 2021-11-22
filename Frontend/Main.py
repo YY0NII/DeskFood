@@ -1,15 +1,17 @@
 from os import name
 import sys
-from pyasn1_modules.rfc2459 import Name
 import requests
 sys.path.append('../')
-from DeskFoodModels.DeskFoodLib import Kitchen, Menu, Item
+from DeskFoodModels.DeskFoodLib import Item, OrderStatus
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialog, QApplication, QListWidget, QMenu, QPushButton, QStackedWidget, QTextBrowser, QWidget
 from urllib.request import urlopen
 import json
 from DeskFoodModels import firebaseAuth
+
+#---Order Number
+#orderNum = ""
 
 #--------------------Login Window--------------------
 class loginScreen(QDialog):
@@ -112,7 +114,6 @@ class customerORRunner(QDialog):
 
 #--------------------Order Window----------------------------
 class orderWindow(QDialog):
-    #TODO: Fix number format by rounding it to 2 decimal places
     def __init__(self):
         super(orderWindow, self).__init__()
         loadUi("Order.ui", self)
@@ -121,6 +122,7 @@ class orderWindow(QDialog):
         self.kitchensList.itemDoubleClicked.connect(self.loadMenu)
         self.returnBTN.clicked.connect(self.goBack)
         self.menuList.itemDoubleClicked.connect(self.addToOrder)
+        self.finishBTN.clicked.connect(self.finish)
 
     def goBack(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)
@@ -153,7 +155,7 @@ class orderWindow(QDialog):
         myArray = data_json.keys()
         for val in myArray:
             if (data_json[val]["Available"]):
-                self.menuList.addItem(str(val) + ": $" + str(data_json[val]["Price"]))
+                self.menuList.addItem(str(val) + ": $" + "%0.2f" % float(data_json[val]["Price"]))
 
     def addToOrder(self):
         itemToAdd = self.menuList.currentItem().text()
@@ -163,12 +165,101 @@ class orderWindow(QDialog):
         subtotal = float(self.subtotalText.toPlainText())
         temp2 = itemToAdd.split('$')
         subtotal2 = float(temp2[1])
-        subtotal = subtotal + subtotal2
-        self.subtotalText.setText(str(subtotal))
-        tax = subtotal * .08
-        self.taxText.setText(str(tax))
+        subtotal = round(subtotal + subtotal2, 2)
+        self.subtotalText.setText( "%0.2f" % subtotal )
+        tax = round(subtotal * .08, 2) 
+        self.taxText.setText( "%0.2f" % tax)
         subtotal = float(self.subtotalText.toPlainText())
-        self.totalText.setText(str(tax + subtotal))
+        self.totalText.setText( "%0.2f" % round(tax + subtotal, 2) )
+
+    def finish(self):
+        kScreen = paymentWindow()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#--------------------Payment Window--------------------
+class paymentWindow(QDialog):
+    def __init__(self):
+        super(paymentWindow, self).__init__()
+        loadUi("Payment.ui", self)
+        self.setWindowTitle("Payment")
+        self.returnBTN.clicked.connect(self.goBack)
+        self.studentIDCheck.clicked.connect(self.clickSID)
+        self.debitcreditCheck.clicked.connect(self.clickDCC)
+        self.finishBTN.clicked.connect(self.finish)      
+        
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
+
+    def clickSID(self):
+        self.studentIDCheck.setChecked(1)
+        self.debitcreditCheck.setChecked(0)
+        self.fullName.setHidden(True)
+        self.ccNumber.setHidden(True)
+        self.expDate.setHidden(True)
+        self.CVV.setHidden(True)
+        self.nameInput.setHidden(True)
+        self.dccInput.setHidden(True)
+        self.expInput.setHidden(True)
+        self.cvvInput.setHidden(True)
+        self.studentID.setHidden(False)
+        self.idInput.setHidden(False)
+
+    def clickDCC(self):
+        self.studentIDCheck.setChecked(0)
+        self.debitcreditCheck.setChecked(1)
+        self.studentID.setHidden(True)
+        self.idInput.setHidden(True)
+        self.fullName.setHidden(False)
+        self.ccNumber.setHidden(False)
+        self.expDate.setHidden(False)
+        self.CVV.setHidden(False)
+        self.nameInput.setHidden(False)
+        self.dccInput.setHidden(False)
+        self.expInput.setHidden(False)
+        self.cvvInput.setHidden(False)
+
+    def finish(self):
+        kScreen = statusWindow()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#--------------------Order Status Window--------------------
+class statusWindow(QDialog):
+    def __init__(self):
+        super(statusWindow, self).__init__()
+        loadUi("OrderStatus.ui", self)
+        self.setWindowTitle("Order Status")
+        self.orderStatusBTN.clicked.connect(self.orderStatus)
+        #self.homeBTN.clicked.connect(self.home)
+
+    def orderStatus(self):
+        # parameter for urlopen
+        # TODO: get orderID from an orderConfirmation page instead of hardcoding
+        url = "http://127.0.0.1:8000/Orders/" + "-MoM8F8DjPwB4fZwcl0C" + "/Status"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+
+        if (data_json == OrderStatus.PENDING.value):
+            self.statusLBL.setText("Order is pending!")
+        elif (data_json == OrderStatus.PREPARING.value):
+            self.statusLBL.setText("Preparing the order!")
+        elif (data_json == OrderStatus.COOKING.value):
+            self.statusLBL.setText("Cooking Order!")
+        elif (data_json == OrderStatus.READY.value):
+            self.statusLBL.setText("Order is ready!")
+        elif (data_json == OrderStatus.ON_THE_WAY.value):
+            self.statusLBL.setText("Order is on the way!")
+        elif (data_json == OrderStatus.DELIVERED.value):
+            self.statusLBL.setText("Order is delivered!")
+        else:
+            self.statusLBL.setText("Something went wrong!")
+    
+    """def home(self):
+        kScreen = orderWindow()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)"""
 
 #--------------------Select Option Window--------------------
 class kitchenMenu(QDialog):
@@ -368,7 +459,7 @@ class kitchenUpdatePrice(QDialog):
         self.itemBox.clear()
         self.itemBox.addItems(list(data_json.keys()))
 
-    #TODO: FINISHE IMPLEMENTING THIS
+    #TODO: FINISH IMPLEMENTING THIS
     #def fillPRice(self):
         #textCost.setText()
     

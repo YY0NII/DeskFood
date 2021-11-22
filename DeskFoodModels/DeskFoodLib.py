@@ -4,11 +4,12 @@ import enum
 
 # Enum for order status
 class OrderStatus(enum.Enum):
-    pending = 'pending'
-    cooking = 'cooking'
-    ready = 'ready'
-    onTheWay = 'on the way'
-    delivered = 'delivered'
+    PENDING = 'Pending'
+    COOKING = 'Cooking'
+    PREPARING = 'Preparing'
+    READY = 'Ready'
+    ON_THE_WAY = 'On the way'
+    DELIVERED = 'Delivered'
 
 # Enum for Kitchen names
 class KitchenNames(enum.Enum):
@@ -41,6 +42,6 @@ class Order(BaseModel):
     user_id: str
     items: List[Item]
     total: float = 0.0
-    status: OrderStatus = OrderStatus.pending
+    status: OrderStatus = OrderStatus.PENDING
     kitchen: Optional[KitchenNames] = None # Not quite sure how to implement this so I'm making it optional for now
     instructions: Optional[str] = None
