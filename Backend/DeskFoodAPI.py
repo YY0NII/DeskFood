@@ -271,6 +271,14 @@ def getOrderById(orderId):
 
     return order.val()
 
+# READS ORDER STATUS BY ID
+@app.get("/Orders/{orderId}/Status", tags=["Order"])
+def getOrderStatusById(orderId):
+    # Gets the Order by the ID
+    order = db.child("Orders").child(orderId).child("Status").get()
+
+    return order.val()
+
 # READS ALL ORDERS BY USER ID
 @app.get("/Orders/User/{userId}", tags=["Order"])
 def getAllOrdersByUserId(userId):
