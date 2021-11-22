@@ -2,7 +2,7 @@ from os import name
 import sys
 import requests
 sys.path.append('../')
-from DeskFoodModels.DeskFoodLib import Item, OrderStatus
+from DeskFoodModels.DeskFoodLib import Item, OrderStatus, Order
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialog, QApplication, QListWidget, QMenu, QPushButton, QStackedWidget, QTextBrowser, QWidget
@@ -10,8 +10,9 @@ from urllib.request import urlopen
 import json
 from DeskFoodModels import firebaseAuth
 
-#---Order Number
+#---Global Variables---#
 #orderNum = ""
+#order = Order()
 
 #--------------------Login Window--------------------
 class loginScreen(QDialog):
@@ -172,6 +173,8 @@ class orderWindow(QDialog):
         subtotal = float(self.subtotalText.toPlainText())
         self.totalText.setText( "%0.2f" % round(tax + subtotal, 2) )
 
+    #TODO: Need to take the items on the orderList widget and store them in a variable possibly global
+
     def finish(self):
         kScreen = paymentWindow()
         widget.addWidget(kScreen)
@@ -224,6 +227,9 @@ class paymentWindow(QDialog):
         kScreen = statusWindow()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#TODO: Need a confirmation page that goes in between the payment and status windows, Should create the order with the DeskFoodAPI method /createOrder
+
 
 #--------------------Order Status Window--------------------
 class statusWindow(QDialog):
