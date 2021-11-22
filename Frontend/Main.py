@@ -90,6 +90,7 @@ class registerScreen(QDialog):
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+
 #--------------------Customer or Runner Window---------------
 class customerORRunner(QDialog):
     def __init__(self):
@@ -179,6 +180,7 @@ class kitchenMenu(QDialog):
         self.updateAvailabilityBTN.clicked.connect(self.updateAvailability)
         self.viewKitchensBTN.clicked.connect(self.viewKitchens)
         self.RemoveItemBTN.clicked.connect(self.removeItem)
+        self.orderDetailsBTN.clicked.connect(self.viewOrders)
 
     def addItem(self):
         kScreen = kitchenAddItem()
@@ -205,6 +207,36 @@ class kitchenMenu(QDialog):
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+    def viewOrders(self):
+        kScreen = KitchenSeeOrders()
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#--------------------Kitchens See orders window--------------------
+class KitchenSeeOrders(QDialog):
+    def __init__(self):
+        super(KitchenSeeOrders, self).__init__()
+        loadUi("KitchenOrderDetails.ui", self)
+        self.loadOrders()
+        self.returnBTN.clicked.connect(self.goBack)
+    
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
+
+    def loadOrders(self):
+        # parameter for urlopen
+        url = "http://127.0.0.1:8000/Orders"
+
+        # store the response of URL
+        response = urlopen(url)
+
+        # storing the JSON response
+        # # from url in data
+        data_json = json.loads(response.read())
+        self.listWidget.addItems(data_json)
+        print(data_json)
+
 #--------------------Kitchens Add Item Window--------------------
 class kitchenAddItem(QDialog):
     def __init__(self):
@@ -221,6 +253,7 @@ class kitchenAddItem(QDialog):
     def goBack(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)
         widget.removeWidget(self)
+
     def unclickF(self):
         self.freshensCheck.setChecked(1)
         self.deliCheck.setChecked(0)

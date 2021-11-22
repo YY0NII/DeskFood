@@ -42,9 +42,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="AddItemBTN">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>525</x>
       <y>150</y>
-      <width>100</width>
+      <width>150</width>
       <height>50</height>
      </rect>
     </property>
@@ -55,9 +55,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="RemoveItemBTN">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>525</x>
       <y>550</y>
-      <width>100</width>
+      <width>150</width>
       <height>50</height>
      </rect>
     </property>
@@ -68,9 +68,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="updateAvailabilityBTN">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>525</x>
       <y>350</y>
-      <width>100</width>
+      <width>150</width>
       <height>50</height>
      </rect>
     </property>
@@ -81,9 +81,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="updatePriceBTN">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>525</x>
       <y>250</y>
-      <width>100</width>
+      <width>150</width>
       <height>50</height>
      </rect>
     </property>
@@ -94,14 +94,27 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="viewKitchensBTN">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>525</x>
       <y>450</y>
-      <width>100</width>
+      <width>150</width>
       <height>50</height>
      </rect>
     </property>
     <property name="text">
      <string>View Kitchens</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="orderDetailsBTN">
+    <property name="geometry">
+     <rect>
+      <x>525</x>
+      <y>650</y>
+      <width>150</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>View Orders</string>
     </property>
    </widget>
   </widget>
