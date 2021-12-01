@@ -189,6 +189,15 @@ def getOrdersWithUserID(orders, userID):
 
     return values
 
+# METHOD TO RETURN A LIST OF ORDERS WITH A SPECIFIC RUNNER ID
+def getOrdersWithRunnerID(orders, runnerID):
+    values = []
+    for i in orders:
+        if i.runner_id == runnerID:
+            values.append(i)
+
+    return values
+
 # ----------------------- CREATE -----------------------
 # CREATES NEW ORDER
 @app.post("/CreateNewOrder", tags=["Order"])
@@ -269,6 +278,17 @@ def getAllOrdersByStatus(status):
 
     # Gets all the Orders with the User ID
     orders = getOrdersWithStatus(dictToListForOrdersFromDatabase(allOrders.val()), status)
+
+    return orders
+
+# Reads all orders with a specific runner id
+@app.get("/Orders/Runner/{runnerId}", tags=["Order"])
+def getAllOrdersByRunnerId(runnerId):
+    # Gets all the Orders
+    allOrders = db.child("Orders").get()
+
+    # Gets all the Orders with the User ID
+    orders = getOrdersWithRunnerID(dictToListForOrdersFromDatabase(allOrders.val()), runnerId)
 
     return orders
 
