@@ -40,8 +40,9 @@ class Kitchen(BaseModel):
 class Order(BaseModel):
     order_id: Optional[str] = None
     user_id: str
-    items: List[Item]
+    runner_id:Optional[str] = None
+    delivery_location: str
+    items: List[str] 
     total: float = 0.0
     status: OrderStatus = OrderStatus.PENDING
-    kitchen: Optional[KitchenNames] = None # Not quite sure how to implement this so I'm making it optional for now
     instructions: Optional[str] = None

@@ -11,8 +11,9 @@ import json
 from DeskFoodModels import firebaseAuth
 
 #---Global Variables---#
-#orderNum = ""
+#orderID = ""
 #order = Order()
+#UserID = ""
 
 #--------------------Login Window--------------------
 class loginScreen(QDialog):
@@ -23,6 +24,7 @@ class loginScreen(QDialog):
         self.registerButton.clicked.connect(self.register)
         self.passwordEdit.setEchoMode(QtWidgets.QLineEdit.Password)
 
+    #TODO: Need to save userNumber to a file
     def login(self):
         self.username = self.emailEdit.text()
         self.password = self.passwordEdit.text()
