@@ -13,7 +13,7 @@ from DeskFoodModels import firebaseAuth
 #---Global Variables---#
 #orderID = ""
 #order = Order()
-#UserID = ""
+userID = ""
 
 #--------------------Login Window--------------------
 class loginScreen(QDialog):
@@ -29,6 +29,8 @@ class loginScreen(QDialog):
         self.username = self.emailEdit.text()
         self.password = self.passwordEdit.text()
         self.user = firebaseAuth.login(self.username, self.password)
+        global userID
+        userID =self.user["localId"]
 
         if self.user:
             if(self.username == "admin@admin.com"):
@@ -77,6 +79,9 @@ class registerScreen(QDialog):
             if self.password == self.passwordConfirm:
                 self.user = firebaseAuth.register(self.email, self.password, self.username)
                 if self.user:
+                    #TODO: Need to save userID
+                    global userID
+                    userID = self.user["localId"]
                     self.accept()
                 
         self.passwordEdit.setText("")
@@ -178,20 +183,63 @@ class orderWindow(QDialog):
     #TODO: Need to take the items on the orderList widget and store them in a variable possibly global
 
     def finish(self):
-        kScreen = paymentWindow()
+        kScreen = OrderConfirmaiton(self.orderList, self.totalText.toPlainText())
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#--------------------Order Confirmation Window----------------------------
+class OrderConfirmaiton(QDialog):
+    def __init__(self, orderList, total):
+        super(OrderConfirmaiton, self).__init__()
+        loadUi("OrderConfirmation.ui", self)
+        self.returnBTN.clicked.connect(self.goBack)
+        self.ConfirmBTN.clicked.connect(self.finish)
+        for i in range(orderList.count()):
+            self.orderItemList.addItem(orderList.item(i).text())
+
+        self.TotalField.setText(total)
+        self.DeliveryLocation.returnPressed.connect(self.enableConfirmButton)
+        # The Button should not be enabled until the user has entered their location   
+        self.ConfirmBTN.setEnabled(False)
+
+    #Method to enable the confirm button
+    def enableConfirmButton(self):
+        # Check if the location is empty
+        if self.DeliveryLocation.text() != "":
+            self.ConfirmBTN.setEnabled(True)
+
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
+
+    def finish(self):
+        orderItems = []
+        for i in range(self.orderItemList.count()):
+            orderItems.append(self.orderItemList.item(i).text())
+
+        order = Order(
+            user_id = userID,
+            delivery_location = self.DeliveryLocation.text(),
+            items = orderItems,  
+            total = self.TotalField.text(), 
+            instructions = self.Instructions.text()
+        )
+        
+        kScreen = paymentWindow(order)
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 #--------------------Payment Window--------------------
 class paymentWindow(QDialog):
-    def __init__(self):
+    def __init__(self, order):
         super(paymentWindow, self).__init__()
         loadUi("Payment.ui", self)
         self.setWindowTitle("Payment")
         self.returnBTN.clicked.connect(self.goBack)
         self.studentIDCheck.clicked.connect(self.clickSID)
         self.debitcreditCheck.clicked.connect(self.clickDCC)
-        self.finishBTN.clicked.connect(self.finish)      
+        # Don't know why this works but stack overflow says it does
+        self.finishBTN.clicked.connect(lambda: self.finish(order))      
         
     def goBack(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)
@@ -225,7 +273,8 @@ class paymentWindow(QDialog):
         self.expInput.setHidden(False)
         self.cvvInput.setHidden(False)
 
-    def finish(self):
+    def finish(self, order):
+        r = requests.post("http://127.0.0.1:8000/CreateNewOrder", order.json())
         kScreen = statusWindow()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
@@ -347,6 +396,7 @@ class KitchenSeeOrders(QDialog):
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+#--------------------Expanded Kitchens order details window--------------------
 class KitchenSeeOrdersDetails(QDialog):
     def __init__(self, orderID):
         super(KitchenSeeOrdersDetails, self).__init__()
