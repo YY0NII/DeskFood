@@ -395,24 +395,26 @@ class paymentWindow(QDialog):
         self.cvvInput.setHidden(False)
 
     def finish(self, order):
+        #Stores the orderID that's created in the database
         r = requests.post("http://127.0.0.1:8000/CreateNewOrder", order.json())
-        kScreen = statusWindow()
+        #print(r.text)
+        kScreen = statusWindow(r.text)
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 #--------------------Order Status Window--------------------
 class statusWindow(QDialog):
-    def __init__(self):
+    def __init__(self, orderID):
         super(statusWindow, self).__init__()
         loadUi("OrderStatus.ui", self)
         self.setWindowTitle("Order Status")
-        self.orderStatusBTN.clicked.connect(self.orderStatus)
+        self.orderStatusBTN.clicked.connect(lambda: self.orderStatus(orderID))
         #self.homeBTN.clicked.connect(self.home)
 
-    def orderStatus(self):
-        # parameter for urlopen
-        # TODO: get orderID from an orderConfirmation page instead of hardcoding
-        url = "http://127.0.0.1:8000/Orders/" + "-MoM8F8DjPwB4fZwcl0C" + "/Status"
+    def orderStatus(self, orderID):
+        # print("This is what we're getting" + orderID)
+        #NOTE: This is a bit of a hack, idk why the orderID keeps the " " around it
+        url = "http://127.0.0.1:8000/Orders/" + orderID.replace('"', "") + "/Status"
         response = urlopen(url)
         data_json = json.loads(response.read())
 
