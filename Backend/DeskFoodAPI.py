@@ -158,8 +158,9 @@ def dictToListForOrdersFromDatabase(orders):
         values.append(
             Order(
                 order_id = i, 
-                user_id = orders[i]["UserID"], 
-                runner_id = orders[i]["RunnerID"],
+                user_id = orders[i]["UserID"],
+                #NOTE: This is a bit of a hack, but it works. Probably be better to just default instructions to "None" in the database 
+                runner_id = orders[i]["RunnerID"] if "RunnerID" in orders[i] else "None", 
                 delivery_location = orders[i]["DeliveryLocation"],
                 items = orders[i]["Items"],  
                 total = orders[i]["Total"], 
@@ -170,6 +171,21 @@ def dictToListForOrdersFromDatabase(orders):
         )
 
     return values
+
+# METHOD TO CONVERT A FIREBASE ORDER INTO AN ORDER OBJECT
+def firebaseOrderToOrder(order, orderID):
+    return Order(
+        order_id = orderID, 
+        user_id = order["UserID"],
+        #NOTE: This is a bit of a hack, but it works. Probably be better to just default instructions to "None" in the database 
+        runner_id = order["RunnerID"] if "RunnerID" in order else "None", 
+        delivery_location = order["DeliveryLocation"],
+        items = order["Items"],  
+        total = order["Total"], 
+        status = order["Status"],
+        #NOTE: This is a bit of a hack, but it works. Probably be better to just default instructions to "None" in the database
+        instructions = order["Instructions"] if "Instructions" in order else "None", 
+    )
 
 # METHOD TO RETURN A LIST OF ORDERS WITH A SPECIFIC STATUS
 def getOrdersWithStatus(orders, status):
@@ -247,7 +263,9 @@ def getOrderById(orderId):
     # Gets the Order by the ID
     order = db.child("Orders").child(orderId).get()
 
-    return order.val()
+    actualOrder = firebaseOrderToOrder(order.val(), orderId)
+
+    return actualOrder
 
 # READS ORDER STATUS BY ID
 @app.get("/Orders/{orderId}/Status", tags=["Order"])
@@ -292,7 +310,75 @@ def getAllOrdersByRunnerId(runnerId):
 
     return orders
 
+# Reads the User ID of an order
+@app.get("/Orders/{orderId}/UserID", tags=["Order"])
+def getUserIdOfOrder(orderId):
+    # Gets the User ID of the Order
+    userId = db.child("Orders").child(orderId).child("UserID").get()
+
+    return userId.val()
+
+#BUG: Has the potential to return crash since RunnerID is an optional field
+# Reads the Runner ID of an order
+@app.get("/Orders/{orderId}/RunnerID", tags=["Order"])
+def getRunnerIdOfOrder(orderId):
+    # Gets the Runner ID of the Order
+    runnerId = db.child("Orders").child(orderId).child("RunnerID").get()
+
+    return runnerId.val()
+
+# Reads the Delivery Location of an order
+@app.get("/Orders/{orderId}/DeliveryLocation", tags=["Order"])
+def getDeliveryLocationOfOrder(orderId):
+    # Gets the Delivery Location of the Order
+    deliveryLocation = db.child("Orders").child(orderId).child("DeliveryLocation").get()
+
+    return deliveryLocation.val()
+
+# Reads the Instructions of an order
+@app.get("/Orders/{orderId}/Instructions", tags=["Order"])
+def getInstructionsOfOrder(orderId):
+    # Gets the Instructions of the Order
+    instructions = db.child("Orders").child(orderId).child("Instructions").get()
+
+    return instructions.val()
+
+# Reads the Total of an order
+@app.get("/Orders/{orderId}/Total", tags=["Order"])
+def getTotalOfOrder(orderId):
+    # Gets the Total of the Order
+    total = db.child("Orders").child(orderId).child("Total").get()
+
+    return total.val()
+
+# Reads the Items of an order
+@app.get("/Orders/{orderId}/Items", tags=["Order"])
+def getItemsOfOrder(orderId):
+    # Gets the Items of the Order
+    items = db.child("Orders").child(orderId).child("Items").get()
+
+    return items.val()
+
+# Reads the status of an order
+@app.get("/Orders/{orderId}/Status", tags=["Order"])
+def getStatusOfOrder(orderId):
+    # Gets the Status of the Order
+    status = db.child("Orders").child(orderId).child("Status").get()
+
+    return status.val()
+
 # ----------------------- UPDATE -----------------------
+# UPDATES THE STATUS OF AN ORDER
+@app.put("/Orders/{orderId}/Status", tags=["Order"])
+def updateOrderStatus(orderId, status):
+    # Updates the Status of the Order
+    db.child("Orders").child(orderId).child("Status").set(status)
+
+# UPDATES THE RUNNER ID OF AN ORDER
+@app.put("/Orders/{orderId}/RunnerID", tags=["Order"])
+def updateOrderRunnerId(orderId, runnerId):
+    # Updates the Runner ID of the Order
+    db.child("Orders").child(orderId).child("RunnerID").set(runnerId)
 
 # ----------------------- DELETE -----------------------
 # DELETE A ORDER

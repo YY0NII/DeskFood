@@ -39,6 +39,7 @@ class Kitchen(BaseModel):
 # An Order should have a user ID, a list of items, an order status, and a total price
 class Order(BaseModel):
     order_id: Optional[str] = None
+    #TODO: Should Change this to CustomerID for clarity
     user_id: str
     runner_id:Optional[str] = None
     delivery_location: str

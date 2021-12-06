@@ -24,7 +24,7 @@ class loginScreen(QDialog):
         self.registerButton.clicked.connect(self.register)
         self.passwordEdit.setEchoMode(QtWidgets.QLineEdit.Password)
 
-    #TODO: Need to save userNumber to a file
+    #TODO: Need to save userID
     def login(self):
         self.username = self.emailEdit.text()
         self.password = self.passwordEdit.text()
@@ -318,6 +318,7 @@ class KitchenSeeOrders(QDialog):
         loadUi("KitchenOrderDetails.ui", self)
         self.loadOrders()
         self.returnBTN.clicked.connect(self.goBack)
+        self.orderList.itemDoubleClicked.connect(self.orderDetails)
     
     def goBack(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)
@@ -325,7 +326,7 @@ class KitchenSeeOrders(QDialog):
 
     def loadOrders(self):
         # parameter for urlopen
-        url = "http://127.0.0.1:8000/Orders"
+        url = "http://127.0.0.1:8000/Orders/Status/Pending"
 
         # store the response of URL
         response = urlopen(url)
@@ -333,8 +334,100 @@ class KitchenSeeOrders(QDialog):
         # storing the JSON response
         # # from url in data
         data_json = json.loads(response.read())
-        self.listWidget.addItems(data_json)
-        print(data_json)
+
+        # Clear orderList
+        self.orderList.clear()
+        # iterate over the data and append the id of the orders to a list
+        for i in range(len(data_json)):
+            self.orderList.addItem(data_json[i]['order_id'])
+
+    def orderDetails(self):
+        # Switch to the order details window
+        kScreen = KitchenSeeOrdersDetails(orderID=self.orderList.currentItem().text())
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+class KitchenSeeOrdersDetails(QDialog):
+    def __init__(self, orderID):
+        super(KitchenSeeOrdersDetails, self).__init__()
+        loadUi("OrderDetail.ui", self)
+        self.setCustomer(orderID)
+        self.setOrder(orderID)
+        self.setOrderItems(orderID)
+        self.setDeliveryLocation(orderID)
+        self.setOrderStatus(orderID)
+        self.setOrderTotal(orderID)
+        self.setOrderInstructions(orderID)
+        self.statusButton.clicked.connect(self.changeStatusToCooking)
+
+    # Set the customer label to the userID of the order
+    def setCustomer(self, orderID):
+        # parameter for urlopen
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/UserID"
+        response = urlopen(url)
+        userID = json.loads(response.read())
+
+        self.customerIDLabel.setText(userID)
+
+    # Set the order label to the orderID of the order
+    def setOrder(self, orderID):
+        self.orderIDLabel.setText(orderID)
+
+    # Populate the items list with the items in the order
+    def setOrderItems(self, orderID):
+        # parameter for urlopen
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/Items"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.itemsList.addItems(data_json)
+
+    # Set the delivery location label to the delivery location of the order
+    def setDeliveryLocation(self, orderID):
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/DeliveryLocation"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.deliveryLocationLabel.setText(data_json)
+
+    # Set the order status label to the order status of the order
+    def setOrderStatus(self, orderID):
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/Status"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.orderStatusLabel.setText(data_json)
+
+    # Set the order total label to the order total of the order
+    def setOrderTotal(self, orderID):
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/Total"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.orderTotalLabel.setText(str(data_json))
+
+    # Set the order instructions label to the order instructions of the order
+    def setOrderInstructions(self, orderID):
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/Instructions"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.orderInstructionsLabel.setText(data_json)
+
+    def changeStatusToCooking(self):
+        orderID = self.orderIDLabel.text()
+        #Update the order status to cooking
+        r = requests.put("http://localhost:8000/Orders/" + orderID + "/Status" + "?status=" + OrderStatus.COOKING.value)
+        self.setOrderStatus(orderID)
+        self.statusButton.setText("Complete Order")
+        self.statusButton.clicked.connect(self.completeOrder)
+
+    def completeOrder(self):
+        orderID = self.orderIDLabel.text()
+        #Update the order status to complete
+        r = requests.put("http://localhost:8000/Orders/" + orderID + "/Status" + "?status=" + OrderStatus.READY.value)
+        self.setOrderStatus(orderID)
+        #Switch back to the kitchenorders window
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.currentWidget().loadOrders()
+        widget.removeWidget(self)
+
+
 
 #--------------------Kitchens Add Item Window--------------------
 class kitchenAddItem(QDialog):
@@ -451,7 +544,7 @@ class kitchenUpdatePrice(QDialog):
         self.returnBTN.clicked.connect(self.goBack)
         self.finishBTN.clicked.connect(self.finish)
         self.fillBTN.clicked.connect(self.fillItems)
-        #self.fillPriceBTN.clicked.connect(self.fillPrice)
+        self.fillPriceBTN.clicked.connect(self.fillPrice)
         #fill kitchen combo box
         url = "http://127.0.0.1:8000/Kitchens"
         response = urlopen(url)
@@ -467,9 +560,14 @@ class kitchenUpdatePrice(QDialog):
         self.itemBox.clear()
         self.itemBox.addItems(list(data_json.keys()))
 
-    #TODO: FINISH IMPLEMENTING THIS
-    #def fillPRice(self):
-        #textCost.setText()
+    def fillPrice(self):
+        nameOfKitchen = self.kitchenBox.currentText()
+        nameOfItem = self.itemBox.currentText()
+        #NOTE: this is a bit of a hack, but it works. Essentially the URL does not like spaces in the item name, so I had to replace them with '%20'.
+        url = "http://127.0.0.1:8000/Kitchens/" + nameOfKitchen + "/" + nameOfItem.replace(' ', '%20') + "/Price"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.textCost.setText(str(data_json))
     
     def goBack(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)
