@@ -1,6 +1,8 @@
 from os import name
 import sys
 import requests
+import time
+import threading
 sys.path.append('../')
 from DeskFoodModels.DeskFoodLib import Item, OrderStatus, Order
 from PyQt5.uic import loadUi
@@ -405,16 +407,30 @@ class paymentWindow(QDialog):
 #--------------------Order Status Window--------------------
 class statusWindow(QDialog):
     def __init__(self, orderID):
+        self.x = 1
         super(statusWindow, self).__init__()
         loadUi("OrderStatus.ui", self)
         self.setWindowTitle("Order Status")
         self.orderStatusBTN.clicked.connect(lambda: self.orderStatus(orderID))
+        #BUG: This solution doesn't work well with the way that I'm passing the orderID
+        #threading.Thread(target=self.update(orderID), daemon=True).start()
         #self.homeBTN.clicked.connect(self.home)
+
+    # def closeEvent(self, event):
+    #     self.x = 0
+        
+    # def update(self, orderID):
+    #     print("hello")
+    #     self.orderStatus(orderID)
+    #     time.sleep(1)
+    #     if(self.x == 1):
+    #         self.update(orderID)
 
     def orderStatus(self, orderID):
         # print("This is what we're getting" + orderID)
         #NOTE: This is a bit of a hack, idk why the orderID keeps the " " around it
         url = "http://127.0.0.1:8000/Orders/" + orderID.replace('"', "") + "/Status"
+        #url = "http://127.0.0.1:8000/Orders/" + "-Mpr0leituNsBbqY2CDq" + "/Status"
         response = urlopen(url)
         data_json = json.loads(response.read())
 
