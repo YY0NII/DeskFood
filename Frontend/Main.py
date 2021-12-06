@@ -24,7 +24,6 @@ class loginScreen(QDialog):
         self.registerButton.clicked.connect(self.register)
         self.passwordEdit.setEchoMode(QtWidgets.QLineEdit.Password)
 
-    #TODO: Need to save userID
     def login(self):
         self.username = self.emailEdit.text()
         self.password = self.passwordEdit.text()
@@ -79,7 +78,6 @@ class registerScreen(QDialog):
             if self.password == self.passwordConfirm:
                 self.user = firebaseAuth.register(self.email, self.password, self.username)
                 if self.user:
-                    #TODO: Need to save userID
                     global userID
                     userID = self.user["localId"]
                     self.accept()
@@ -116,9 +114,133 @@ class customerORRunner(QDialog):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def runner(self):
-        kScreen = kitchenMenu()
+        kScreen = RunnerPickOrder()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#--------------------Runner Pick Orders Window--------------------
+class RunnerPickOrder(QDialog):
+    def __init__(self):
+        super(RunnerPickOrder, self).__init__()
+        loadUi("RunnerPickOrder.ui", self)
+        self.loadOrders()
+        self.returnBTN.clicked.connect(self.goBack)
+        self.orderList.itemDoubleClicked.connect(self.orderDetails)
+    
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
+
+    def loadOrders(self):
+        # parameter for urlopen
+        url = "http://127.0.0.1:8000/Orders/Status/Ready"
+
+        # store the response of URL
+        response = urlopen(url)
+
+        # storing the JSON response
+        # # from url in data
+        data_json = json.loads(response.read())
+
+        # Clear orderList
+        self.orderList.clear()
+        # iterate over the data and append the id of the orders to a list
+        for i in range(len(data_json)):
+            self.orderList.addItem(data_json[i]['order_id'])
+
+    def orderDetails(self):
+        # Switch to the order details window
+        kScreen = RunnerOrderDetails(orderID=self.orderList.currentItem().text())
+        widget.addWidget(kScreen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+#--------------------Runner Order Details Window--------------------
+class RunnerOrderDetails(QDialog):
+    def __init__(self, orderID):
+        super(RunnerOrderDetails, self).__init__()
+        loadUi("RunnerOrderDetails.ui", self)
+        self.returnBTN.clicked.connect(self.goBack)
+        self.setCustomer(orderID)
+        self.setOrder(orderID)
+        self.setOrderItems(orderID)
+        self.setDeliveryLocation(orderID)
+        self.setOrderStatus(orderID)
+        self.setOrderTotal(orderID)
+        self.setOrderInstructions(orderID)
+        self.statusButton.clicked.connect(self.changeStatusToEnRoute)
+
+    def goBack(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+        widget.removeWidget(self)
+
+    # Set the customer label to the userID of the order
+    def setCustomer(self, orderID):
+        # parameter for urlopen
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/UserID"
+        response = urlopen(url)
+        userID = json.loads(response.read())
+
+        self.customerIDLabel.setText(userID)
+
+    # Set the order label to the orderID of the order
+    def setOrder(self, orderID):
+        self.orderIDLabel.setText(orderID)
+
+    # Populate the items list with the items in the order
+    def setOrderItems(self, orderID):
+        # parameter for urlopen
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/Items"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.itemsList.addItems(data_json)
+
+    # Set the delivery location label to the delivery location of the order
+    def setDeliveryLocation(self, orderID):
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/DeliveryLocation"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.deliveryLocationLabel.setText(data_json)
+
+    # Set the order status label to the order status of the order
+    def setOrderStatus(self, orderID):
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/Status"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.orderStatusLabel.setText(data_json)
+
+    # Set the order total label to the order total of the order
+    def setOrderTotal(self, orderID):
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/Total"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.orderTotalLabel.setText("$" + str(data_json))
+
+    # Set the order instructions label to the order instructions of the order
+    def setOrderInstructions(self, orderID):
+        url = "http://127.0.0.1:8000/Orders" + "/" + orderID + "/Instructions"
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        self.orderInstructionsLabel.setText(data_json)
+
+    def changeStatusToEnRoute(self):
+        orderID = self.orderIDLabel.text()
+        #Update the order status to en route
+        r = requests.put("http://localhost:8000/Orders/" + orderID + "/Status" + "?status=" + OrderStatus.ON_THE_WAY.value)
+        #Update the order RunnerID to the current runner
+        r = requests.put("http://localhost:8000/Orders/" + orderID + "/RunnerID" + "?runnerId=" + userID)
+        self.setOrderStatus(orderID)
+        self.statusButton.setText("Confirm Delivery")
+        self.statusButton.clicked.connect(self.changeStatusToDelivered)
+    
+    def changeStatusToDelivered(self):
+        orderID = self.orderIDLabel.text()
+        #Update the order status to delivered
+        r = requests.put("http://localhost:8000/Orders/" + orderID + "/Status" + "?status=" + OrderStatus.DELIVERED.value)
+        self.setOrderStatus(orderID)
+        #Switch back to the RunnerPickOrder window
+        widget.setCurrentIndex(widget.currentIndex() - 1) 
+        widget.currentWidget().loadOrders()
+        widget.removeWidget(self)
 
 #--------------------Order Window----------------------------
 class orderWindow(QDialog):
@@ -180,7 +302,6 @@ class orderWindow(QDialog):
         subtotal = float(self.subtotalText.toPlainText())
         self.totalText.setText( "%0.2f" % round(tax + subtotal, 2) )
 
-    #TODO: Need to take the items on the orderList widget and store them in a variable possibly global
 
     def finish(self):
         kScreen = OrderConfirmaiton(self.orderList, self.totalText.toPlainText())
@@ -278,9 +399,6 @@ class paymentWindow(QDialog):
         kScreen = statusWindow()
         widget.addWidget(kScreen)
         widget.setCurrentIndex(widget.currentIndex() + 1)
-
-#TODO: Need a confirmation page that goes in between the payment and status windows, Should create the order with the DeskFoodAPI method /createOrder
-
 
 #--------------------Order Status Window--------------------
 class statusWindow(QDialog):
