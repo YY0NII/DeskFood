@@ -23,31 +23,34 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(85, 170, 255, 255), stop:1 rgba(255, 255, 255, 255));</string>
+    <string notr="true">background-color: rgb(0, 111, 113);</string>
    </property>
    <widget class="QLabel" name="locationLabel">
     <property name="geometry">
      <rect>
-      <x>-1</x>
+      <x>300</x>
       <y>25</y>
-      <width>1201</width>
+      <width>600</width>
       <height>150</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>.AppleSystemUIFont</family>
+      <family>Arial Black</family>
       <pointsize>32</pointsize>
-      <weight>50</weight>
+      <weight>10</weight>
       <italic>false</italic>
       <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 32pt &quot;.AppleSystemUIFont&quot;;</string>
+     <string notr="true">border-radius:20px;
+background-color: rgb(255, 255, 255);
+font: 87 32pt &quot;Arial Black&quot;;
+color:rgb(0, 111, 113);</string>
     </property>
     <property name="text">
-     <string>Welcome</string>
+     <string>Welcome to DeskFood</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -94,7 +97,9 @@ background-color: rgba(255, 255, 255, 0);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     <string notr="true">background-color: rgba(255, 255, 255, 0);
+font: 87 12pt &quot;Arial Black&quot;;
+color:rgb(0, 111, 113);</string>
     </property>
     <property name="text">
      <string>Email</string>
@@ -105,12 +110,14 @@ background-color: rgba(255, 255, 255, 0);</string>
      <rect>
       <x>450</x>
       <y>325</y>
-      <width>60</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     <string notr="true">background-color: rgba(255, 255, 255, 0);
+font: 87 12pt &quot;Arial Black&quot;;
+color:rgb(0, 111, 113);</string>
     </property>
     <property name="text">
      <string>Password</string>
@@ -127,7 +134,9 @@ background-color: rgba(255, 255, 255, 0);</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius:20px;
-background-color: rgb(244, 96, 54);</string>
+color: rgb(255, 255, 255);
+background-color: rgb(0, 111, 113);
+font: 87 12pt &quot;Arial Black&quot;;</string>
     </property>
     <property name="text">
      <string>Login</string>
@@ -144,14 +153,53 @@ background-color: rgb(244, 96, 54);</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius:20px;
-background-color: rgb(244, 96, 54);</string>
+background-color: rgb(0, 111, 113);
+color: rgb(255, 255, 255);
+font: 87 12pt &quot;Arial Black&quot;;</string>
     </property>
     <property name="text">
      <string>Register</string>
     </property>
    </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>200</y>
+      <width>400</width>
+      <height>300</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+font: 12pt &quot;Arial&quot;;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+   </widget>
+   <zorder>frame</zorder>
+   <zorder>locationLabel</zorder>
+   <zorder>emailEdit</zorder>
+   <zorder>passwordEdit</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>loginButton</zorder>
+   <zorder>registerButton</zorder>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>emailEdit</tabstop>
+  <tabstop>passwordEdit</tabstop>
+  <tabstop>loginButton</tabstop>
+  <tabstop>registerButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

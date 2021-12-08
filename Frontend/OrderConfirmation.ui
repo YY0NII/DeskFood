@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">font: 87 12pt &quot;Arial Black&quot;;
+color: rgb(255, 255, 255);</string>
+  </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
@@ -23,19 +27,21 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(85, 170, 255, 255), stop:1 rgba(255, 255, 255, 255));</string>
+    <string notr="true">background-color:rgb(0, 111, 113);</string>
    </property>
    <widget class="QPushButton" name="returnBTN">
     <property name="geometry">
      <rect>
       <x>50</x>
       <y>60</y>
-      <width>100</width>
-      <height>25</height>
+      <width>120</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(244, 96, 54);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);border-radius:20px;
+color:rgb(0, 111, 113);
+</string>
     </property>
     <property name="text">
      <string>Go Back</string>
@@ -52,9 +58,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>25</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>10</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -79,6 +87,10 @@
       <height>200</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="ConfirmBTN">
     <property name="geometry">
@@ -91,11 +103,16 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>17</pointsize>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>10</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(244, 96, 54);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);border-radius:20px;
+color:rgb(0, 111, 113);</string>
     </property>
     <property name="text">
      <string>Confirm</string>
@@ -112,7 +129,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>10</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -136,7 +157,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>19</pointsize>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>10</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -157,7 +182,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>15</pointsize>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>10</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -178,8 +207,16 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>10</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string/>
@@ -199,8 +236,16 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>10</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string/>
@@ -212,27 +257,23 @@
      <string>[Enter Instructions Here]</string>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="textBrowser">
+   <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>730</x>
+      <x>750</x>
       <y>550</y>
-      <width>151</width>
-      <height>81</height>
+      <width>111</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     <string notr="true">font: 87 8pt &quot;Arial Black&quot;;</string>
     </property>
-    <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
+    <property name="text">
+     <string>Press enter after entering a location</string>
     </property>
-    <property name="html">
-     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#7c7c7c;&quot;&gt;Press Enter After Completing to Continue&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

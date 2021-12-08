@@ -35,7 +35,9 @@
     </sizepolicy>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(85, 170, 255, 255), stop:1 rgba(255, 255, 255, 255));</string>
+    <string notr="true">background-color:rgb(0, 111, 113);
+font: 87 12pt &quot;Arial Black&quot;;
+color: rgb(255, 255, 255);</string>
    </property>
    <widget class="QLabel" name="orderIDLabel">
     <property name="geometry">
@@ -54,11 +56,16 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <family>Arial Black</family>
+      <pointsize>28</pointsize>
+      <weight>10</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     <string notr="true">background-color: rgba(255, 255, 255, 0);
+font: 87 28pt &quot;Arial Black&quot;;</string>
     </property>
     <property name="text">
      <string>Order#</string>
@@ -76,9 +83,9 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>439</x>
       <y>125</y>
-      <width>100</width>
+      <width>111</width>
       <height>25</height>
      </rect>
     </property>
@@ -87,6 +94,9 @@
     </property>
     <property name="text">
      <string>CustomerID:</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="customerIDLabel">
@@ -108,9 +118,9 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>439</x>
       <y>175</y>
-      <width>100</width>
+      <width>111</width>
       <height>25</height>
      </rect>
     </property>
@@ -143,9 +153,9 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>439</x>
       <y>225</y>
-      <width>100</width>
+      <width>111</width>
       <height>25</height>
      </rect>
     </property>
@@ -159,9 +169,9 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>439</x>
       <y>275</y>
-      <width>100</width>
+      <width>111</width>
       <height>25</height>
      </rect>
     </property>
@@ -175,9 +185,9 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>439</x>
       <y>325</y>
-      <width>100</width>
+      <width>121</width>
       <height>25</height>
      </rect>
     </property>
@@ -209,7 +219,7 @@
      <rect>
       <x>575</x>
       <y>275</y>
-      <width>200</width>
+      <width>221</width>
       <height>25</height>
      </rect>
     </property>
@@ -233,7 +243,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::NoFrame</enum>
@@ -259,16 +270,16 @@
     </property>
     <property name="font">
      <font>
-      <family>.AppleSystemUIFont</family>
-      <pointsize>16</pointsize>
-      <weight>50</weight>
+      <family>Arial Black</family>
+      <pointsize>12</pointsize>
+      <weight>10</weight>
       <italic>false</italic>
       <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 16pt &quot;.AppleSystemUIFont&quot;;
-background-color: rgba(255, 255, 255, 0);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::NoFrame</enum>
@@ -293,14 +304,15 @@ background-color: rgba(255, 255, 255, 0);</string>
    <widget class="QPushButton" name="statusButton">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>525</x>
       <y>675</y>
-      <width>100</width>
+      <width>150</width>
       <height>50</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(244, 96, 54);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);border-radius:20px;
+color:rgb(0, 111, 113);</string>
     </property>
     <property name="text">
      <string>Start Cooking</string>

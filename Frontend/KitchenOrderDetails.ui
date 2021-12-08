@@ -23,19 +23,22 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(85, 170, 255, 255), stop:1 rgba(255, 255, 255, 255));</string>
+    <string notr="true">background-color:rgb(0, 111, 113);
+font: 87 12pt &quot;Arial Black&quot;;
+color: rgb(255, 255, 255);</string>
    </property>
    <widget class="QPushButton" name="returnBTN">
     <property name="geometry">
      <rect>
       <x>40</x>
       <y>30</y>
-      <width>93</width>
-      <height>28</height>
+      <width>100</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(244, 96, 54);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);border-radius:20px;
+color:rgb(0, 111, 113);</string>
     </property>
     <property name="text">
      <string>Go Back</string>
@@ -45,20 +48,23 @@
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>30</y>
+      <y>10</y>
       <width>661</width>
       <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>25</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Arial Black</family>
+      <pointsize>28</pointsize>
+      <weight>10</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     <string notr="true">background-color: rgba(255, 255, 255, 0);
+font: 87 28pt &quot;Arial Black&quot;;</string>
     </property>
     <property name="text">
      <string>Order Details</string>
@@ -77,11 +83,17 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
     </property>
     <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
+     <enum>QFrame::StyledPanel</enum>
     </property>
+    <item>
+     <property name="text">
+      <string>Dummy text</string>
+     </property>
+    </item>
    </widget>
   </widget>
  </widget>

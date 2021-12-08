@@ -14,7 +14,9 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(85, 170, 255);</string>
+   <string notr="true">background-color:rgb(0, 111, 113);
+font: 87 12pt &quot;Arial Black&quot;;
+color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QFrame" name="frame">
    <property name="geometry">
@@ -63,7 +65,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(221, 221, 221);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string/>
@@ -82,7 +85,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(221, 221, 221);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string/>
@@ -101,7 +105,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(221, 221, 221);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string/>
@@ -120,7 +125,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(221, 221, 221);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string/>
@@ -133,13 +139,15 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>402</y>
-      <width>221</width>
-      <height>31</height>
+      <y>400</y>
+      <width>225</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(85, 170, 255);</string>
+     <string notr="true">background-color:rgb(0, 111, 113);
+border-radius:20px;
+color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>Sign Up!</string>
@@ -153,6 +161,10 @@
       <width>301</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+font: 87 10pt &quot;Arial Black&quot;;</string>
     </property>
     <property name="text">
      <string>I Agree with the Terms and Conditions</string>

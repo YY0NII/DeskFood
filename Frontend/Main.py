@@ -35,6 +35,7 @@ class loginScreen(QDialog):
         userID =self.user["localId"]
 
         if self.user:
+            #BUG: If a user types admin with a capital letter, it will take them to the customer or runner screen instead of the kitchen menu
             if(self.username == "admin@admin.com"):
                 self.acceptadmin()
             else:
