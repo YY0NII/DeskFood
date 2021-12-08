@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>800</height>
+    <height>776</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -95,7 +95,8 @@ font: 32pt &quot;MS Shell Dlg 2&quot;;</string>
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     <string notr="true">background-color: rgba(255, 255, 255, 0);
+font: 24pt &quot;Arial Black&quot;;</string>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Plain</enum>
