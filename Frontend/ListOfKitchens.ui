@@ -93,11 +93,6 @@ color: rgb(0, 0, 0);</string>
     <property name="midLineWidth">
      <number>1</number>
     </property>
-    <item>
-     <property name="text">
-      <string>Test Item</string>
-     </property>
-    </item>
    </widget>
    <widget class="QListWidget" name="menuList">
     <property name="geometry">

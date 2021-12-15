@@ -47,16 +47,16 @@ color:rgb(0, 111, 113);</string>
    <widget class="QLabel" name="OrderDetails">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>275</x>
       <y>10</y>
-      <width>661</width>
-      <height>61</height>
+      <width>700</width>
+      <height>60</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Arial Black</family>
-      <pointsize>28</pointsize>
+      <pointsize>24</pointsize>
       <weight>10</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -64,7 +64,7 @@ color:rgb(0, 111, 113);</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgba(255, 255, 255, 0);
-font: 87 28pt &quot;Arial Black&quot;;</string>
+font: 87 24pt &quot;Arial Black&quot;;</string>
     </property>
     <property name="text">
      <string>Order Details</string>
@@ -89,11 +89,6 @@ color: rgb(0, 0, 0);</string>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
     </property>
-    <item>
-     <property name="text">
-      <string>Dummy text</string>
-     </property>
-    </item>
    </widget>
   </widget>
  </widget>

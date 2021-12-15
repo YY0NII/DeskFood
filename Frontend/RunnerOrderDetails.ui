@@ -42,9 +42,9 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="orderIDLabel">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>350</x>
       <y>50</y>
-      <width>300</width>
+      <width>500</width>
       <height>50</height>
      </rect>
     </property>
